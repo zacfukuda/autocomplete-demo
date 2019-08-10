@@ -1,0 +1,78 @@
+@charset "utf-8";
+* {
+	box-sizing: border-box;
+}
+body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
+	font-size: 14px;
+	line-height: 20px;
+}
+
+/**
+ * Textarea
+ */
+.autocomplete-wrap {
+	margin: 100px 0 100px 100px;
+	width: 480px;
+	/* height: 320px; */
+	background: #fff;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	overflow-wrap: break-word;
+	padding: 10px;
+	white-space: pre-wrap;
+}
+
+.autocomplete-wrap > span.tag,
+span.tag {
+	background: #f0f0f0;
+	border: 1px solid #eee;
+	border-radius: 2px;
+	display: inline-block;
+	margin: 0 4px 0 0;
+	padding: 1px 3px;
+}
+
+.autocomplete {
+	/* display: inline-block;
+	min-width: 4px;
+	outline: transparent; */
+	margin: 100px 0 100px 100px;
+	width: 480px;
+	/* height: 320px; */
+	background: #fff;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	overflow-wrap: break-word;
+	padding: 10px;
+	white-space: pre-wrap;
+}
+.autocomplete:focus {
+	outline: none;
+}
+
+/**
+ * Suggestion
+ */
+.suggestion {
+	position: fixed;
+	background: #fff;
+	border: 1px solid #ddd;
+	display: none;
+	overflow-y: auto;
+	/* width: 240px;
+	height: 100px; */
+	max-height: 200px;
+	z-index: 100;
+}
+
+.suggestion > a {
+	color: #333;
+	display: block;
+	padding: 8px 12px;
+	text-decoration: none;
+}
+
+.suggestion > a:hover {
+	background: #f0f0f6;
+}

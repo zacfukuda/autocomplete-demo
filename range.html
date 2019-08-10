@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Range</title>
+	<style>
+		#textarea{border:1px solid #ccc;padding: 10px;}
+		.tag{display: inline-block;background: #f0f0f0;padding:1px 4px;}
+	</style>
+</head>
+<body>
+	<div id="textarea" contenteditable="true"></div>
+
+<script>
+var textarea = document.getElementById('textarea')
+// var range = new Range()
+
+textarea.oninput = function(e) {
+	var sel = window.getSelection()
+	var range = sel.getRangeAt(0)
+	console.log(range)
+}
+</script>
+</body>
+</html>
