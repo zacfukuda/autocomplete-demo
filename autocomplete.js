@@ -24,7 +24,6 @@ const suggestion = document.getElementById('suggestion')
 
 // Set width
 suggestion.style.width = suggestionWindowSize.width + 'px'
-// suggestion.style.height = suggestionWindowSize.height + 'px'
 
 const textareaStyle = getComputedStyle(textarea)
 
@@ -33,16 +32,59 @@ const positionadjustment = {
 	top: parseInt(textareaStyle.lineHeight)
 }
 
-// Backspace/delete handler
-textarea.onkeydown = function(e) {
+function focusInput() {
+	var range = new Range()
+	var sel = window.getSelection()
+	range.selectNodeContents(textareaInput.lastChild)
+	range.collapse(false)
+	sel.removeAllRanges()
+	sel.addRange(range)
+}
+
+function enterHandler() {
+	console.log("Enter!")
+}
+
+function keydownHandler(e) {
 	var key = e.keyCode || e.charCode
 
-	if ( key == 8 || key == 46) {
-		var sel = window.getSelection()
-		console.log(sel)
+	// "Enter"
+	if ( key === 13 ) {
 		e.preventDefault()
+		enterHandler()
+		return
 	}
+	// Proceed only "delete" or "backspace" key is down
+	if ( key !== 8 && key !== 46) { return }
+
+	var sel = window.getSelection()
+	var focusNode = sel.focusNode
+
+	var string = textareaInput.innerHTML
+
+	// String has more than 2 letters
+	if (string.length > 2) { return }
+
+	var tags = textarea.querySelectorAll('span.tag')
+	var tagLength = tags.length
+
+	if ( string.length === 1  || focusNode.parentElement === textarea ) {
+		e.preventDefault()
+
+		// One or no tag
+		if ( tagLength < 2 ) {
+			textareaInput.innerHTML = ''
+			textarea.focus()
+		}
+
+		// Delete the last of tags
+		if ( tagLength ) { tags[tagLength-1].remove() }
+	}
+	return
 }
+
+// Backspace/delete handler
+textarea.onkeydown = keydownHandler
 
 textarea.oninput = function(e) {
 	var sel, focusNode, range, value, suggestion, suggests
@@ -54,17 +96,13 @@ textarea.oninput = function(e) {
 	// Input to text to span.input
 	if (focusNode.parentElement !== textareaInput) {
 		textareaInput.innerHTML = value
-		range = new Range()
-		range.selectNodeContents(textareaInput.lastChild) // Select text node, not DOM element
-		range.collapse(false)
-		sel.removeAllRanges()
-		sel.addRange(range)
+		focusInput()
 		
 		// Delete original user input
 		focusNode.remove()
 	}
 
-	if ( !value ) {
+	if ( !value || value == ' ') {
 		hideSuggestion()
 		return
 	}
@@ -134,9 +172,9 @@ function updateSuggestion(suggests) {
 	
 	if (suggestion.style.display === 'block') { return }
 
-	var postion = getCaretPosition()
-	suggestion.style.left = postion.left + 'px'
-	suggestion.style.top = postion.top + 'px'
+	var position = getCaretPosition()
+	suggestion.style.left = position.left + 'px'
+	suggestion.style.top = position.top + 'px'
 	suggestion.style.display = 'block'
 }
 
@@ -157,7 +195,7 @@ function insertToTextarea(e) {
 	span.appendChild(textNode)
 
 	// Clean inside textarea, remove unnecessary text nodes like \n
-	let lastChild = textareaInput.lastChild 
+	let lastChild = textareaInput.lastChild
 	while ( lastChild.nodeType === Node.TEXT_NODE ) {
 		lastChild.remove()
 		lastChild = textareaInput.lastChild 
@@ -171,14 +209,7 @@ function insertToTextarea(e) {
 	textarea.insertBefore(span, textareaInput)
 	
 	// Caret at the end of editor
-	var range = new Range()
-	var sel = window.getSelection()
-	range.selectNodeContents(textareaInput)
-	range.collapse(false)
-	// range.setStartAfter(span)
-	// range.setEndAfter(span)
-	sel.removeAllRanges()
-	sel.addRange(range)
+	focusInput()
 
 	// Hide suggetions
 	hideSuggestion()
