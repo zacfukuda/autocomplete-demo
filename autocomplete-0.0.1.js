@@ -5,7 +5,7 @@
  * @link https://stackoverflow.com/questions/3972014/get-caret-position-in-contenteditable-div
  */
 
-// const data = window.data
+const data = window.tagData
 
 const suggestionWindowSize = {
 	width: 240,
@@ -53,7 +53,7 @@ function keydownHandler(e) {
 
 	var sel = window.getSelection()
 	var focusNode = sel.focusNode
-
+	
 	var string = textareaInput.innerHTML
 
 	// String has more than 2 letters

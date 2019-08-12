@@ -5,7 +5,7 @@
 		'Java', 'JavaScript'
 	]
 	
-	window.data = keywords.map((name, index) => {
+	window.tagData = keywords.map((name, index) => {
 		var item = {id: index, name: name }
 		return item
 	})
